@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "id": "project_9e878a32-5aaa-4496-b154-719301bd6c8a",
+  "name": "三鏡示範影片",
+  "description": "Storyboard Editor 範例專案",
+  "language": "zh-TW",
+  "aspectRatio": "16:9",
+  "createdAt": "2026-07-15T08:00:00Z",
+  "updatedAt": "2026-07-15T08:00:00Z",
+  "tags": ["sample"],
+  "exportSettings": {
+    "resolution": { "width": 1920, "height": 1080 },
+    "fps": 30,
+    "audioSampleRate": 48000,
+    "backgroundColor": "#111827"
+  },
+  "shots": [
+    {
+      "id": "shot_11111111-1111-4111-8111-111111111111",
+      "order": 1,
+      "title": "開場",
+      "scriptText": "一個好故事，從清楚的第一鏡開始。",
+      "visualDescription": "黑色背景中，第一張分鏡卡緩緩亮起。",
+      "durationMs": 4000,
+      "enabled": true,
+      "status": "ready",
+      "tags": ["intro"],
+      "visual": {
+        "kind": "image",
+        "path": "02_visuals/images/scene-01.png",
+        "prompt": "cinematic storyboard card glowing in dark studio, 16:9",
+        "fit": "cover",
+        "inMs": 0,
+        "outMs": null,
+        "posterPath": ""
+      },
+      "narration": {
+        "text": "一個好故事，從清楚的第一鏡開始。",
+        "path": "03_audio/narration/shot-01.wav",
+        "voice": "Narrator-A",
+        "gainDb": 0,
+        "offsetMs": 200,
+        "durationMs": 3100
+      },
+      "soundEffects": [
+        {
+          "id": "sfx_11111111-1111-4111-8111-111111111111",
+          "name": "柔和亮起",
+          "path": "03_audio/sfx/soft-rise.wav",
+          "startMs": 0,
+          "trimInMs": 0,
+          "trimOutMs": null,
+          "gainDb": -10,
+          "loop": false,
+          "fadeInMs": 200,
+          "fadeOutMs": 300
+        }
+      ],
+      "transition": { "type": "fade", "durationMs": 300 },
+      "notes": "封面式開場，不要放太多文字。",
+      "createdAt": "2026-07-15T08:00:00Z",
+      "updatedAt": "2026-07-15T08:00:00Z"
+    },
+    {
+      "id": "shot_22222222-2222-4222-8222-222222222222",
+      "order": 2,
+      "title": "展示編輯器",
+      "scriptText": "每一鏡都能設定圖片、影片、旁白與音效。",
+      "visualDescription": "鏡頭屬性面板依序展開。",
+      "durationMs": 6500,
+      "enabled": true,
+      "status": "needs-review",
+      "tags": ["feature"],
+      "visual": {
+        "kind": "video",
+        "path": "02_visuals/videos/editor-demo.mp4",
+        "prompt": "",
+        "fit": "contain",
+        "inMs": 1500,
+        "outMs": 8000,
+        "posterPath": "02_visuals/images/editor-demo-poster.jpg"
+      },
+      "narration": {
+        "text": "每一鏡都能設定圖片、影片、旁白與音效。",
+        "path": "03_audio/narration/shot-02.wav",
+        "voice": "Narrator-A",
+        "gainDb": 0,
+        "offsetMs": 300,
+        "durationMs": 4400
+      },
+      "soundEffects": [],
+      "transition": { "type": "cut", "durationMs": 0 },
+      "notes": "影片素材尚未放入範例資料夾。",
+      "createdAt": "2026-07-15T08:00:00Z",
+      "updatedAt": "2026-07-15T08:00:00Z"
+    },
+    {
+      "id": "shot_33333333-3333-4333-8333-333333333333",
+      "order": 3,
+      "title": "匯出",
+      "scriptText": "完成後，匯出給剪輯軟體或自動化流程。",
+      "visualDescription": "匯出按鈕亮起，畫面淡出。",
+      "durationMs": 4500,
+      "enabled": true,
+      "status": "draft",
+      "tags": ["outro"],
+      "visual": {
+        "kind": "none",
+        "path": "",
+        "prompt": "clean dark export screen, teal accent, cinematic UI, 16:9",
+        "fit": "cover",
+        "inMs": 0,
+        "outMs": null,
+        "posterPath": ""
+      },
+      "narration": {
+        "text": "完成後，匯出給剪輯軟體或自動化流程。",
+        "path": "",
+        "voice": "Narrator-A",
+        "gainDb": 0,
+        "offsetMs": 0,
+        "durationMs": null
+      },
+      "soundEffects": [],
+      "transition": { "type": "fade", "durationMs": 500 },
+      "notes": "",
+      "createdAt": "2026-07-15T08:00:00Z",
+      "updatedAt": "2026-07-15T08:00:00Z"
+    }
+  ]
+}

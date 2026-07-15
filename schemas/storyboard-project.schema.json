@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://storyboard-editor.local/schemas/storyboard-project.schema.json",
+  "title": "Storyboard Editor Project",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schemaVersion", "id", "name", "description", "language", "aspectRatio", "createdAt", "updatedAt", "tags", "exportSettings", "shots"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "language": { "type": "string", "minLength": 2 },
+    "aspectRatio": { "enum": ["16:9", "9:16", "1:1", "4:3", "21:9"] },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "tags": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "exportSettings": { "$ref": "#/$defs/exportSettings" },
+    "shots": { "type": "array", "items": { "$ref": "#/$defs/shot" } }
+  },
+  "$defs": {
+    "exportSettings": {
+      "type": "object",
+      "required": ["resolution", "fps", "audioSampleRate", "backgroundColor"],
+      "properties": {
+        "resolution": {
+          "type": "object",
+          "required": ["width", "height"],
+          "properties": {
+            "width": { "type": "integer", "minimum": 16 },
+            "height": { "type": "integer", "minimum": 16 }
+          }
+        },
+        "fps": { "type": "integer", "minimum": 1, "maximum": 240 },
+        "audioSampleRate": { "type": "integer", "minimum": 8000, "maximum": 384000 },
+        "backgroundColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+      }
+    },
+    "shot": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "order", "title", "scriptText", "visualDescription", "durationMs", "enabled", "status", "tags", "visual", "narration", "soundEffects", "transition", "notes", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "order": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string" },
+        "scriptText": { "type": "string" },
+        "visualDescription": { "type": "string" },
+        "durationMs": { "type": "integer", "minimum": 100 },
+        "enabled": { "type": "boolean" },
+        "status": { "enum": ["draft", "ready", "needs-review", "archived"] },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "visual": { "$ref": "#/$defs/visual" },
+        "narration": { "$ref": "#/$defs/narration" },
+        "soundEffects": { "type": "array", "items": { "$ref": "#/$defs/soundEffect" } },
+        "transition": { "$ref": "#/$defs/transition" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "required": ["kind", "path", "prompt", "fit", "inMs", "outMs", "posterPath"],
+      "properties": {
+        "kind": { "enum": ["none", "image", "video"] },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "prompt": { "type": "string" },
+        "fit": { "enum": ["contain", "cover", "stretch"] },
+        "inMs": { "type": "integer", "minimum": 0 },
+        "outMs": { "type": ["integer", "null"], "minimum": 0 },
+        "posterPath": { "$ref": "#/$defs/relativePath" }
+      }
+    },
+    "narration": {
+      "type": "object",
+      "required": ["text", "path", "voice", "gainDb", "offsetMs", "durationMs"],
+      "properties": {
+        "text": { "type": "string" },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "voice": { "type": "string" },
+        "gainDb": { "type": "number", "minimum": -96, "maximum": 24 },
+        "offsetMs": { "type": "integer", "minimum": 0 },
+        "durationMs": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "soundEffect": {
+      "type": "object",
+      "required": ["id", "name", "path", "startMs", "trimInMs", "trimOutMs", "gainDb", "loop", "fadeInMs", "fadeOutMs"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "startMs": { "type": "integer", "minimum": 0 },
+        "trimInMs": { "type": "integer", "minimum": 0 },
+        "trimOutMs": { "type": ["integer", "null"], "minimum": 0 },
+        "gainDb": { "type": "number", "minimum": -96, "maximum": 24 },
+        "loop": { "type": "boolean" },
+        "fadeInMs": { "type": "integer", "minimum": 0 },
+        "fadeOutMs": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "required": ["type", "durationMs"],
+      "properties": {
+        "type": { "enum": ["cut", "fade", "dissolve", "wipe", "custom"] },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "customName": { "type": "string" }
+      }
+    },
+    "relativePath": {
+      "type": "string",
+      "not": { "pattern": "(^[A-Za-z]:)|(^/)|(^\\\\)|(^|[\\\\/])\\.\\.([\\\\/]|$)" }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <rect width="1440" height="900" fill="#0b0d10"/>
+  <rect x="0" y="0" width="1440" height="54" fill="#0f1317" stroke="#29313b"/>
+  <rect x="14" y="10" width="34" height="34" rx="9" fill="#4fd1c5"/>
+  <text x="60" y="26" fill="#f4f7fa" font-family="Arial" font-size="14" font-weight="700">Storyboard Editor</text>
+  <text x="60" y="42" fill="#97a3b2" font-family="Arial" font-size="10">示範影片</text>
+  <rect x="0" y="54" width="262" height="662" fill="#12161b" stroke="#29313b"/>
+  <text x="16" y="84" fill="#97a3b2" font-family="Arial" font-size="11">鏡頭</text>
+  <g transform="translate(8 100)">
+    <rect width="246" height="72" rx="8" fill="#172522" stroke="#2d5b56"/>
+    <rect x="8" y="12" width="48" height="42" rx="5" fill="#0b0e12" stroke="#29313b"/>
+    <text x="68" y="29" fill="#4fd1c5" font-family="Arial" font-size="10">01</text>
+    <text x="90" y="29" fill="#f4f7fa" font-family="Arial" font-size="11">開場：提出問題</text>
+    <text x="68" y="49" fill="#97a3b2" font-family="Arial" font-size="9">00:04 · 已完成</text>
+  </g>
+  <g transform="translate(8 179)">
+    <rect width="246" height="62" rx="8" fill="#181e25"/>
+    <rect x="8" y="10" width="48" height="42" rx="5" fill="#0b0e12" stroke="#29313b"/>
+    <text x="68" y="27" fill="#4fd1c5" font-family="Arial" font-size="10">02</text>
+    <text x="90" y="27" fill="#f4f7fa" font-family="Arial" font-size="11">展示工作流程</text>
+    <text x="68" y="47" fill="#97a3b2" font-family="Arial" font-size="9">00:06 · 草稿</text>
+  </g>
+  <rect x="262" y="54" width="828" height="662" fill="#0d1014" stroke="#29313b"/>
+  <text x="280" y="84" fill="#f4f7fa" font-family="Arial" font-size="12" font-weight="700">開場：提出問題</text>
+  <rect x="326" y="130" width="700" height="394" fill="#122522" stroke="#343d47"/>
+  <rect x="382" y="180" width="588" height="294" fill="none" stroke="#27504c"/>
+  <text x="676" y="254" text-anchor="middle" fill="#4fd1c5" font-family="Arial" font-size="10">SHOT 01</text>
+  <text x="676" y="302" text-anchor="middle" fill="#f4f7fa" font-family="Arial" font-size="28" font-weight="700">開場：提出問題</text>
+  <text x="676" y="340" text-anchor="middle" fill="#b3c0cc" font-family="Arial" font-size="14">深色工作桌，筆記與分鏡紙逐一亮起。</text>
+  <rect x="410" y="452" width="532" height="40" rx="5" fill="#000" opacity=".66"/>
+  <text x="676" y="477" text-anchor="middle" fill="#fff" font-family="Arial" font-size="13">你是否曾經有一個好點子，卻不知道如何把它變成完整影片？</text>
+  <rect x="1090" y="54" width="350" height="662" fill="#12161b" stroke="#29313b"/>
+  <text x="1106" y="84" fill="#97a3b2" font-family="Arial" font-size="11">鏡頭屬性</text>
+  <text x="1408" y="84" text-anchor="end" fill="#4fd1c5" font-family="Arial" font-size="11">#01</text>
+  <g font-family="Arial" font-size="9" fill="#97a3b2">
+    <text x="1106" y="126">鏡頭標題</text><rect x="1106" y="136" width="318" height="34" rx="5" fill="#0e1216" stroke="#29313b"/><text x="1116" y="157" fill="#f4f7fa" font-size="11">開場：提出問題</text>
+    <text x="1106" y="195">文字／腳本</text><rect x="1106" y="205" width="318" height="78" rx="5" fill="#0e1216" stroke="#29313b"/>
+    <text x="1106" y="312">圖片或影片</text><rect x="1106" y="322" width="318" height="34" rx="5" fill="#0e1216" stroke="#29313b"/>
+    <text x="1106" y="385">旁白文字</text><rect x="1106" y="395" width="318" height="78" rx="5" fill="#0e1216" stroke="#29313b"/>
+    <text x="1106" y="504">音效</text><rect x="1106" y="514" width="318" height="88" rx="7" fill="#10151a" stroke="#29313b"/>
+  </g>
+  <rect x="0" y="716" width="1440" height="184" fill="#0f1317" stroke="#29313b"/>
+  <text x="14" y="748" fill="#f4f7fa" font-family="Arial" font-size="12" font-weight="700">時間軸</text>
+  <text x="76" y="748" fill="#97a3b2" font-family="Arial" font-size="10">3 鏡 · 00:16.000</text>
+  <g transform="translate(14 770)">
+    <rect width="370" height="112" fill="#17302d" stroke="#4fd1c5" stroke-width="2"/>
+    <rect x="370" width="530" height="112" fill="#19242d" stroke="#35404b"/>
+    <rect x="900" width="512" height="112" fill="#17202a" stroke="#35404b"/>
+    <text x="12" y="24" fill="#4fd1c5" font-family="Arial" font-size="10">01</text><text x="12" y="45" fill="#f4f7fa" font-family="Arial" font-size="11">開場：提出問題</text>
+    <text x="382" y="24" fill="#4fd1c5" font-family="Arial" font-size="10">02</text><text x="382" y="45" fill="#f4f7fa" font-family="Arial" font-size="11">展示工作流程</text>
+    <text x="912" y="24" fill="#4fd1c5" font-family="Arial" font-size="10">03</text><text x="912" y="45" fill="#f4f7fa" font-family="Arial" font-size="11">完成分鏡</text>
+  </g>
+</svg>

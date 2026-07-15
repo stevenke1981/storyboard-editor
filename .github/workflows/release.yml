@@ -1,0 +1,66 @@
+name: release
+on:
+  workflow_dispatch:
+jobs:
+  preflight:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:security
+      - run: npm run build
+      - name: Build release artifact
+        shell: pwsh
+        env:
+          TAURI_UPDATER_PUBLIC_KEY: ${{ secrets.TAURI_UPDATER_PUBLIC_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TAURI_UPDATER_PUBLIC_KEY) -or [string]::IsNullOrWhiteSpace($env:TAURI_SIGNING_PRIVATE_KEY)) { throw "missing Tauri updater signing secrets" }
+          ./scripts/validate-tauri-updater-key.ps1 -Key $env:TAURI_UPDATER_PUBLIC_KEY
+          $version = $env:GITHUB_REF_NAME.TrimStart('v')
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "release tag must be semver" }
+          $pkg = Get-Content package.json -Raw | ConvertFrom-Json; if ($pkg.version -ne (Get-Content VERSION -Raw).Trim()) { throw "version contract mismatch" }
+          $pkg.version = $version; $pkg | ConvertTo-Json -Depth 10 | Set-Content package.json
+          Set-Content VERSION $version -NoNewline
+          $cargo = Get-Content Cargo.toml -Raw; $cargo = [regex]::Replace($cargo, '(?m)^version = "[^"]+"', "version = `\"$version`\"", 1); Set-Content Cargo.toml $cargo -NoNewline
+          $config = Get-Content src-tauri\tauri.conf.json -Raw
+          $config = $config.Replace("__INJECT_PINNED_ED25519_PUBLIC_KEY__", $env:TAURI_UPDATER_PUBLIC_KEY)
+          if ($config.Contains("__INJECT_PINNED_ED25519_PUBLIC_KEY__")) { throw "updater public key placeholder remains" }
+          Set-Content src-tauri\tauri.conf.json $config -NoNewline
+          $config = ($config | ConvertFrom-Json); $config.version = $version; $config | ConvertTo-Json -Depth 20 | Set-Content src-tauri\tauri.conf.json
+          npm run tauri build -- --bundles nsis
+          New-Item -ItemType Directory -Force release-artifacts | Out-Null
+          $installer = Get-ChildItem src-tauri\target\release\bundle\nsis -Filter *.exe -File | Select-Object -First 1
+          if (!$installer) { throw "Tauri installer was not produced" }
+          Copy-Item $installer.FullName release-artifacts\storyboard-editor-installer.exe
+          $sig = Get-ChildItem src-tauri\target\release\bundle -Recurse -Filter *.sig -File | Select-Object -First 1
+          $manifest = Get-ChildItem src-tauri\target\release\bundle -Recurse -Include latest.json,*.manifest.json -File | Select-Object -First 1
+          if (!$sig -or !$manifest) { throw "Tauri updater signature/manifest missing" }
+          Copy-Item $sig.FullName release-artifacts\storyboard-editor-installer.sig; Copy-Item $manifest.FullName release-artifacts\latest.json
+      - name: Sign artifact and fail-closed verify
+        shell: pwsh
+        env:
+          RELEASE_VERSION: ${{ github.ref_name }}
+          STORYBOARD_UPDATE_ENDPOINT: ${{ secrets.STORYBOARD_UPDATE_ENDPOINT }}
+          TAURI_SIGNING_PRIVATE_KEY_PEM: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PEM }}
+          TAURI_SIGNING_PUBLIC_KEY_PEM: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY_PEM }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TAURI_SIGNING_PRIVATE_KEY_PEM) -or [string]::IsNullOrWhiteSpace($env:TAURI_SIGNING_PUBLIC_KEY_PEM)) { throw "missing signing secrets" }
+          $private = Join-Path $env:RUNNER_TEMP "private.pem"; $public = Join-Path $env:RUNNER_TEMP "public.pem"
+          Set-Content $private $env:TAURI_SIGNING_PRIVATE_KEY_PEM -NoNewline; Set-Content $public $env:TAURI_SIGNING_PUBLIC_KEY_PEM -NoNewline
+          $version = $env:RELEASE_VERSION.TrimStart('v'); if ([string]::IsNullOrWhiteSpace($version)) { throw "release tag version is required" }
+          ./scripts/release-sign.ps1 -Artifact release-artifacts/storyboard-editor-installer.exe -PrivateKeyPath $private -Version $version
+          ./scripts/release-preflight.ps1 -Mode release -UpdateEndpoint $env:STORYBOARD_UPDATE_ENDPOINT -SigningKeyPath $private -PublicKeyPath $public -MetadataPath release-artifacts/update-metadata.json
+      - name: Upload only verified artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: storyboard-editor-release
+          path: release-artifacts/*
