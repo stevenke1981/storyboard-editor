@@ -30,7 +30,7 @@ export function TopBar({ projectName, shotCount, dirty, persistenceError, playin
         <button className="button ghost" onClick={onRedo} disabled={!canRedo} aria-label="重做">重做</button>
         <button className="button ghost" onClick={onCheckUpdate} aria-label="檢查更新">檢查更新</button>
         <button className="button ghost" onClick={onAdd}><Icon name="plus" />新增鏡頭</button>
-        <button className="button" onClick={onTogglePlay}><Icon name={playing ? "pause" : "play" />}{playing ? "暫停" : "預覽"}</button>
+        <button className="button" onClick={onTogglePlay}><Icon name={playing ? "pause" : "play"} />{playing ? "暫停" : "預覽"}</button>
         <button className="button" onClick={onExportJson}><Icon name="download" />JSON</button>
         <button className="button primary" onClick={onExportArtifacts}><Icon name="download" />匯出專案</button>
       </div>
