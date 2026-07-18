@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- 桌面版改用 Tauri App Data 工作區載入與原子保存 `storyboard.json`，保存失敗會顯示於工具列。
+- 新增受控影片預覽、跨鏡頭連續播放，以及可點選與拖曳定位的時間軸播放頭。
+- 新增 JSON 下載與桌面匯出，產生 `storyboard.json`、FFmpeg concat 清單與指令範本。
+- 桌面匯出會先列出可能覆寫的檔案並要求確認，Rust command 亦會拒絕未確認的呼叫。
+- 統一 Rust 原始碼格式與 LF 行尾，確保 workspace 的 rustfmt 檢查可重現通過。
+
 ## 0.1.0 - 2026-07-15
 
 - 建立完整 Storyboard Editor 開發骨架。

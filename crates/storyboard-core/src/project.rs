@@ -23,7 +23,9 @@ pub enum ProjectError {
 pub fn create_project(root: impl AsRef<Path>, title: &str) -> Result<PathBuf, ProjectError> {
     let folder = sanitize_project_name(title);
     let project_root = root.as_ref().join(folder);
-    if project_root.exists() { return Err(ProjectError::AlreadyExists(project_root)); }
+    if project_root.exists() {
+        return Err(ProjectError::AlreadyExists(project_root));
+    }
     for relative in [
         "01_script",
         "02_visuals/images",
@@ -50,13 +52,20 @@ pub fn load_project(project_root: impl AsRef<Path>) -> Result<StoryboardProject,
     Ok(project)
 }
 
-pub fn save_project(project_root: impl AsRef<Path>, project: &StoryboardProject) -> Result<(), ProjectError> {
+pub fn save_project(
+    project_root: impl AsRef<Path>,
+    project: &StoryboardProject,
+) -> Result<(), ProjectError> {
     let errors: Vec<_> = validate_project(project)
         .into_iter()
         .filter(|issue| issue.severity == ValidationSeverity::Error)
         .collect();
     if !errors.is_empty() {
-        let message = errors.into_iter().map(|i| format!("{}: {}", i.path, i.message)).collect::<Vec<_>>().join("; ");
+        let message = errors
+            .into_iter()
+            .map(|i| format!("{}: {}", i.path, i.message))
+            .collect::<Vec<_>>()
+            .join("; ");
         return Err(ProjectError::Validation(message));
     }
 
@@ -69,7 +78,10 @@ pub fn save_project(project_root: impl AsRef<Path>, project: &StoryboardProject)
 
     if destination.exists() {
         let timestamp = chrono::Utc::now().format("%Y%m%dT%H%M%SZ");
-        fs::copy(&destination, backup_dir.join(format!("storyboard-{timestamp}.json")))?;
+        fs::copy(
+            &destination,
+            backup_dir.join(format!("storyboard-{timestamp}.json")),
+        )?;
     }
 
     {
@@ -82,7 +94,9 @@ pub fn save_project(project_root: impl AsRef<Path>, project: &StoryboardProject)
     }
 
     #[cfg(windows)]
-    if destination.exists() { fs::remove_file(&destination)?; }
+    if destination.exists() {
+        fs::remove_file(&destination)?;
+    }
     fs::rename(&temp, &destination)?;
     Ok(())
 }
