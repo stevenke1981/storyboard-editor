@@ -23,7 +23,7 @@ export function openDesktopProject(projectRoot: string): Promise<StoryboardProje
 export function saveDesktopProject(projectRoot: string, project: StoryboardProject): Promise<void> { return invokeTauri<void>("write_project", { projectRoot, project }); }
 export function loadDesktopWorkspace(): Promise<StoryboardProject | null> { return invokeTauri<StoryboardProject | null>("load_workspace"); }
 export function saveDesktopWorkspace(project: StoryboardProject): Promise<string> { return invokeTauri<string>("save_workspace", { project }); }
-export function exportDesktopArtifacts(project: StoryboardProject): Promise<string> { return invokeTauri<string>("export_artifacts", { project }); }
+export function exportDesktopArtifacts(project: StoryboardProject, confirmed: boolean): Promise<string> { return invokeTauri<string>("export_artifacts", { project, confirmed }); }
 export function validateDesktopProject(project: StoryboardProject): Promise<string[]> { return invokeTauri<string[]>("check_project", { project }); }
 export function importDesktopAsset(projectRoot: string, source: string, relativeDestination: string): Promise<string> { return invokeTauri<string>("import_asset", { projectRoot, source, relativeDestination }); }
 export function checkDesktopUpdate(): Promise<string | null> { return invokeTauri<string | null>("check_for_update"); }

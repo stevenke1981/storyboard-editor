@@ -1,5 +1,8 @@
-use storyboard_core::{create_project, load_project, sanitize_project_name, validate_project, StoryboardProject, ValidationSeverity};
 use storyboard_core::{build_ffmpeg_plan, export_csv, export_markdown, export_srt};
+use storyboard_core::{
+    create_project, load_project, sanitize_project_name, validate_project, StoryboardProject,
+    ValidationSeverity,
+};
 
 #[test]
 fn sanitizes_windows_names() {
@@ -21,7 +24,9 @@ fn rejects_too_short_shot() {
     let mut project = StoryboardProject::new("Test");
     project.shots[0].duration_ms = 10;
     let issues = validate_project(&project);
-    assert!(issues.iter().any(|issue| issue.severity == ValidationSeverity::Error));
+    assert!(issues
+        .iter()
+        .any(|issue| issue.severity == ValidationSeverity::Error));
 }
 
 #[test]

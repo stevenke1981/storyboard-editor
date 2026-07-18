@@ -73,7 +73,10 @@ pub struct ExportSettings {
 impl Default for ExportSettings {
     fn default() -> Self {
         Self {
-            resolution: Resolution { width: 1920, height: 1080 },
+            resolution: Resolution {
+                width: 1920,
+                height: 1080,
+            },
             fps: 30,
             audio_sample_rate: 48_000,
             background_color: "#111827".to_string(),
@@ -169,11 +172,19 @@ impl Default for VisualAsset {
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
-pub enum VisualKind { None, Image, Video }
+pub enum VisualKind {
+    None,
+    Image,
+    Video,
+}
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
-pub enum VisualFit { Contain, Cover, Stretch }
+pub enum VisualFit {
+    Contain,
+    Cover,
+    Stretch,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -188,7 +199,14 @@ pub struct NarrationTrack {
 
 impl Default for NarrationTrack {
     fn default() -> Self {
-        Self { text: String::new(), path: String::new(), voice: String::new(), gain_db: 0.0, offset_ms: 0, duration_ms: None }
+        Self {
+            text: String::new(),
+            path: String::new(),
+            voice: String::new(),
+            gain_db: 0.0,
+            offset_ms: 0,
+            duration_ms: None,
+        }
     }
 }
 
@@ -220,10 +238,20 @@ pub struct Transition {
 
 impl Default for Transition {
     fn default() -> Self {
-        Self { transition_type: TransitionType::Cut, duration_ms: 0, custom_name: None }
+        Self {
+            transition_type: TransitionType::Cut,
+            duration_ms: 0,
+            custom_name: None,
+        }
     }
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
-pub enum TransitionType { Cut, Fade, Dissolve, Wipe, Custom }
+pub enum TransitionType {
+    Cut,
+    Fade,
+    Dissolve,
+    Wipe,
+    Custom,
+}

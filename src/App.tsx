@@ -75,7 +75,7 @@ export default function App() {
         onAdd={() => dispatch({ type: "add" })}
         onTogglePlay={togglePlay}
         onExportJson={exportJson}
-        onExportArtifacts={async () => { try { const path = await exportArtifacts(); window.alert(`匯出完成：${path}`); } catch (error) { window.alert(`匯出失敗：${error instanceof Error ? error.message : String(error)}`); } }}
+        onExportArtifacts={async () => { try { const path = await exportArtifacts(); if (path) window.alert(`匯出完成：${path}`); } catch (error) { window.alert(`匯出失敗：${error instanceof Error ? error.message : String(error)}`); } }}
         onUndo={() => dispatch({ type: "undo" })}
         onRedo={() => dispatch({ type: "redo" })}
         canUndo={state.past.length > 0}

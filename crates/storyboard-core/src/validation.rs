@@ -4,7 +4,10 @@ use std::path::{Component, Path};
 use crate::{ShotStatus, StoryboardProject, VisualKind};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ValidationSeverity { Warning, Error }
+pub enum ValidationSeverity {
+    Warning,
+    Error,
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ValidationIssue {
@@ -28,13 +31,22 @@ pub fn validate_project(project: &StoryboardProject) -> Vec<ValidationIssue> {
             issues.push(error(format!("{base}.id"), "鏡頭 ID 重複"));
         }
         if shot.duration_ms < 100 && shot.status != ShotStatus::Archived {
-            issues.push(error(format!("{base}.durationMs"), "鏡頭時長不得小於 100 ms"));
+            issues.push(error(
+                format!("{base}.durationMs"),
+                "鏡頭時長不得小於 100 ms",
+            ));
         }
         if shot.order as usize != index + 1 {
-            issues.push(warning(format!("{base}.order"), "鏡頭 order 與陣列位置不一致"));
+            issues.push(warning(
+                format!("{base}.order"),
+                "鏡頭 order 與陣列位置不一致",
+            ));
         }
         if shot.visual.kind != VisualKind::None && shot.visual.path.trim().is_empty() {
-            issues.push(warning(format!("{base}.visual.path"), "已指定視覺類型但尚未設定素材路徑"));
+            issues.push(warning(
+                format!("{base}.visual.path"),
+                "已指定視覺類型但尚未設定素材路徑",
+            ));
         }
         for (field, value) in [
             ("visual.path", shot.visual.path.as_str()),
@@ -42,7 +54,10 @@ pub fn validate_project(project: &StoryboardProject) -> Vec<ValidationIssue> {
             ("narration.path", shot.narration.path.as_str()),
         ] {
             if !value.is_empty() && !is_safe_relative_path(value) {
-                issues.push(error(format!("{base}.{field}"), "素材必須使用安全的專案相對路徑"));
+                issues.push(error(
+                    format!("{base}.{field}"),
+                    "素材必須使用安全的專案相對路徑",
+                ));
             }
         }
         if let Some(duration) = shot.narration.duration_ms {
@@ -52,10 +67,16 @@ pub fn validate_project(project: &StoryboardProject) -> Vec<ValidationIssue> {
         }
         for (sfx_index, sfx) in shot.sound_effects.iter().enumerate() {
             if !sfx.path.is_empty() && !is_safe_relative_path(&sfx.path) {
-                issues.push(error(format!("{base}.soundEffects[{sfx_index}].path"), "音效路徑不安全"));
+                issues.push(error(
+                    format!("{base}.soundEffects[{sfx_index}].path"),
+                    "音效路徑不安全",
+                ));
             }
             if sfx.start_ms > shot.duration_ms {
-                issues.push(warning(format!("{base}.soundEffects[{sfx_index}].startMs"), "音效開始時間超出鏡頭"));
+                issues.push(warning(
+                    format!("{base}.soundEffects[{sfx_index}].startMs"),
+                    "音效開始時間超出鏡頭",
+                ));
             }
         }
     }
@@ -67,25 +88,51 @@ pub fn sanitize_project_name(input: &str) -> String {
     let mut result: String = input
         .trim()
         .chars()
-        .map(|ch| if invalid.contains(&ch) || ch.is_control() { '_' } else { ch })
+        .map(|ch| {
+            if invalid.contains(&ch) || ch.is_control() {
+                '_'
+            } else {
+                ch
+            }
+        })
         .collect();
-    while result.ends_with(' ') || result.ends_with('.') { result.pop(); }
-    if result.is_empty() { result = "Untitled-Storyboard".to_string(); }
+    while result.ends_with(' ') || result.ends_with('.') {
+        result.pop();
+    }
+    if result.is_empty() {
+        result = "Untitled-Storyboard".to_string();
+    }
     let uppercase = result.to_ascii_uppercase();
-    let reserved = ["CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"];
-    if reserved.contains(&uppercase.as_str()) { result.insert(0, '_'); }
+    let reserved = [
+        "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8",
+        "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+    ];
+    if reserved.contains(&uppercase.as_str()) {
+        result.insert(0, '_');
+    }
     result
 }
 
 pub fn is_safe_relative_path(value: &str) -> bool {
     let path = Path::new(value);
-    if path.is_absolute() || value.starts_with("\\\\") || value.chars().nth(1) == Some(':') { return false; }
-    path.components().all(|component| matches!(component, Component::Normal(_) | Component::CurDir))
+    if path.is_absolute() || value.starts_with("\\\\") || value.chars().nth(1) == Some(':') {
+        return false;
+    }
+    path.components()
+        .all(|component| matches!(component, Component::Normal(_) | Component::CurDir))
 }
 
 fn error(path: impl Into<String>, message: impl Into<String>) -> ValidationIssue {
-    ValidationIssue { severity: ValidationSeverity::Error, path: path.into(), message: message.into() }
+    ValidationIssue {
+        severity: ValidationSeverity::Error,
+        path: path.into(),
+        message: message.into(),
+    }
 }
 fn warning(path: impl Into<String>, message: impl Into<String>) -> ValidationIssue {
-    ValidationIssue { severity: ValidationSeverity::Warning, path: path.into(), message: message.into() }
+    ValidationIssue {
+        severity: ValidationSeverity::Warning,
+        path: path.into(),
+        message: message.into(),
+    }
 }

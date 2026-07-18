@@ -17,6 +17,9 @@
 - 新增與移除音效。
 - 顯示預覽卡與比例時間軸。
 - localStorage 自動保存瀏覽器 demo。
+- Tauri 桌面版會在 App Data 工作區載入並以 core atomic save 保存 `storyboard.json`，保存錯誤會顯示於工具列。
+- 影片預覽使用受控來源與播放時間，可跨鏡頭連續播放；時間軸支援點選與拖曳播放頭定位。
+- 桌面匯出會產生 JSON、FFmpeg concat 清單及指令範本，並在覆寫既有輸出前列出影響範圍要求確認。
 - CSV、Markdown、SRT 與 FFmpeg plan 可由 core/CLI 匯出；FFmpeg plan 僅描述組裝計畫，不直接執行。
 - 編輯器支援最多 50 層 undo/redo 快照與鍵盤快捷鍵。
 - 鏡頭清單支援以 HTML5 drag-and-drop 重新排序（仍保留按鈕與鍵盤操作）。
@@ -40,7 +43,7 @@
 - SVG：UI 線框圖 XML 結構通過。
 - TypeScript：`npm run typecheck`、`npm test` 與 `npm run build` 通過。
 - E2E：`npm run test:e2e` 通過 1 個非破壞流程。
-- Rust：使用 `C:\Users\steven\.cargo\bin\cargo.exe test --workspace` 通過。
+- Rust：`cargo test --workspace` 與 `cargo fmt --all -- --check` 通過。
 - Release gate：dev 模式通過；release 缺 endpoint、HTTP endpoint、hash mismatch 時正確拒絕；source package allowlist 未包含敏感副檔名或 operational 目錄。
 
 完整紀錄見 `docs/validation-report.md`。

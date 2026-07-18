@@ -123,7 +123,16 @@ export function useStoryboardProject() {
 
   const exportArtifacts = useCallback(async () => {
     if (!isTauriRuntime()) { exportJson(); return "瀏覽器版已下載 storyboard.json；FFmpeg 清單僅桌面版支援。"; }
-    return exportDesktopArtifacts(state.project);
+    const confirmed = window.confirm([
+      "將在工作區的 04_exports 覆寫下列輸出（若已存在）：",
+      "• storyboard.json",
+      "• ffmpeg-concat.txt",
+      "• ffmpeg-command.txt",
+      "",
+      "是否繼續？",
+    ].join("\n"));
+    if (!confirmed) return null;
+    return exportDesktopArtifacts(state.project, true);
   }, [exportJson, state.project]);
 
   return { state, selectedShot, dispatch, exportJson, exportArtifacts, persistenceError };
